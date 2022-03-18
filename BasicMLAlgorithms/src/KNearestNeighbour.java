@@ -5,10 +5,8 @@ public class KNearestNeighbour {
 	private static String trainingFilePath = "./src/wine-training";
 	private static String testFilePath = "./src/wine-test";
 	private static int numWineAttributes = 13;
-	private static ArrayList<Double[]> wineTrainingArray = new ArrayList();
-	private static ArrayList<Integer> wineTrainingClasses = new ArrayList();
-	private static ArrayList<Double[]> wineTestArray = new ArrayList();
-	private static ArrayList<Integer> wineTestClasses = new ArrayList();
+	private static ArrayList<Wine> wineTrainingArray = new ArrayList();
+	private static ArrayList<Wine> wineTestArray = new ArrayList();
 
 	public static void main(String[] args) {
 
@@ -30,23 +28,15 @@ public class KNearestNeighbour {
 
 			while(trainScan.hasNextLine()) {
 				Scanner lineScan = new Scanner(trainScan.nextLine());
-				Double[] wineArray = new Double[numWineAttributes];
+				double[] wineArray = new double[numWineAttributes];
 				for(int j = 0; j<wineArray.length; j++) {
 					wineArray[j]=lineScan.nextDouble();
 				}
-				wineTrainingClasses.add(lineScan.nextInt());
-				wineTrainingArray.add(wineArray);
+				wineTrainingArray.add(new Wine(wineArray, lineScan.nextInt()));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-		/*for(Double[] wine : wineTrainingArray) {
-			for(int i = 0; i<wine.length; i++) {
-				System.out.print(wine[i] + " ");
-			}
-			System.out.println("");
-		}*/
 	}
 
 	private static void readTest(File testFile) {
@@ -59,23 +49,26 @@ public class KNearestNeighbour {
 
 			while(trainScan.hasNextLine()) {
 				Scanner lineScan = new Scanner(trainScan.nextLine());
-				Double[] wineArray = new Double[numWineAttributes];
+				double[] wineArray = new double[numWineAttributes];
 				for(int j = 0; j<wineArray.length; j++) {
 					wineArray[j]=lineScan.nextDouble();
 				}
-				wineTestClasses.add(lineScan.nextInt());
-				wineTestArray.add(wineArray);
+				wineTestArray.add(new Wine(wineArray, lineScan.nextInt()));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		/*for(Double[] wine : wineTestArray) {
-			for(int i = 0; i<wine.length; i++) {
-				System.out.print(wine[i] + " ");
+		/*for(Wine wine : wineTestArray) {
+			for(int i = 0; i<wine.getAttributes().length; i++) {
+				System.out.print(wine.getAttributes()[i] + " ");
 			}
 			System.out.println("");
 		}*/
+	}
+
+	private static void KNNMethod() {
+
 	}
 
 }
