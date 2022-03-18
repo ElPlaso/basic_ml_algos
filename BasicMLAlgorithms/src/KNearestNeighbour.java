@@ -69,6 +69,24 @@ public class KNearestNeighbour {
 
 	private static void KNNMethod() {
 
+
+
+
+	}
+
+	private static double findRange(int col) {
+		ArrayList<Double> doubles = new ArrayList();
+
+		for(Wine wine : wineTestArray) {
+			doubles.add(wine.getAttributes()[col]);
+		}
+
+		Collections.sort(doubles);
+
+		double max = doubles.get(0);
+		double min = doubles.get(doubles.size()-1);
+
+		return max-min;
 	}
 
 }
