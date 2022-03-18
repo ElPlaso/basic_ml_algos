@@ -68,25 +68,42 @@ public class KNearestNeighbour {
 	}
 
 	private static void KNNMethod() {
+		for(Wine wine : wineTestArray) {
 
+			HashMap<Double, Wine> distances = new HashMap<>();
 
+			for(Wine trainWine : wineTrainingArray) {
+				double distance = 0.0;
+				for(int i = 0; i<numWineAttributes; i++) {
+					distance += Math.pow(wine.getAttributes()[i] - trainWine.getAttributes()[i], 2) /
+								Math.pow(findRange(i), 2);
+				}
 
-
+				distances.put(distance, trainWine);
+			}
+		}
 	}
 
 	private static double findRange(int col) {
-		ArrayList<Double> doubles = new ArrayList();
+		try {
+			ArrayList<Double> doubles = new ArrayList();
 
-		for(Wine wine : wineTestArray) {
-			doubles.add(wine.getAttributes()[col]);
+			for(Wine wine : wineTestArray) {
+				doubles.add(wine.getAttributes()[col]);
+			}
+
+			Collections.sort(doubles);
+
+			double max = doubles.get(0);
+			double min = doubles.get(doubles.size()-1);
+
+
+			return max-min;
 		}
-
-		Collections.sort(doubles);
-
-		double max = doubles.get(0);
-		double min = doubles.get(doubles.size()-1);
-
-		return max-min;
+		catch(Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 }
