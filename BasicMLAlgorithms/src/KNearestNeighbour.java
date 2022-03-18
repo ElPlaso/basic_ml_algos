@@ -3,13 +3,9 @@ import java.util.*;
 
 public class KNearestNeighbour {
 
-	private ArrayList<ArrayList<Double>> wineTrainingArray;
-	private ArrayList<ArrayList<Double>> wineTestArray;
-
-	public void KNearestNeighbout() {
-		this.wineTrainingArray = new ArrayList();
-		this.wineTestArray = new ArrayList();
-	}
+	private int numWineAttributes = 14; //13 attributes + class
+	private ArrayList<Double[]> wineTrainingArray = new ArrayList();
+	private ArrayList<Double[]> wineTestArray = new ArrayList();
 
 	public static void main(String[] args) {
 		String training = args[0];
@@ -24,14 +20,23 @@ public class KNearestNeighbour {
 		try {
 			Scanner trainScan = new Scanner(trainFile);
 
+			trainScan.nextLine();
 
+			int numWine = (int)trainFile.length() - 2;
 
+			for(int i = 0; i<numWine; i++) {
+				Double[] wineArray = new Double[numWineAttributes];
+				for(int j = 0; j<wineArray.length; j++) {
+					wineArray[j]=trainScan.nextDouble();
+				}
+				wineTrainingArray.add(wineArray);
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-
 	}
+
+
 
 	private void readTest(File testFile) {
 		try {
