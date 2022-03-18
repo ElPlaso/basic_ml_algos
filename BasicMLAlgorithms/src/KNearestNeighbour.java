@@ -70,7 +70,7 @@ public class KNearestNeighbour {
 	private static void KNNMethod() {
 		for(Wine wine : wineTestArray) {
 
-			HashMap<Double, Wine> distances = new HashMap<>();
+			HashMap<Double, Wine> wineDistances = new HashMap<>();
 
 			for(Wine trainWine : wineTrainingArray) {
 				double distance = 0.0;
@@ -79,8 +79,13 @@ public class KNearestNeighbour {
 								Math.pow(findRange(i), 2);
 				}
 
-				distances.put(distance, trainWine);
+				wineDistances.put(distance, trainWine);
 			}
+
+			Double[] distances = (Double[]) wineDistances.keySet().toArray();
+			Arrays.sort(distances);
+
+			Wine closestWine = wineDistances.get(distances[0]);
 		}
 	}
 
