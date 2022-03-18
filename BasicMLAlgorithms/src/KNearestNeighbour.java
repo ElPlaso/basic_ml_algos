@@ -8,6 +8,7 @@ public class KNearestNeighbour {
 	private static ArrayList<Double[]> wineTrainingArray = new ArrayList();
 	private static ArrayList<Integer> wineTrainingClasses = new ArrayList();
 	private static ArrayList<Double[]> wineTestArray = new ArrayList();
+	private static ArrayList<Integer> wineTestClasses = new ArrayList();
 
 	public static void main(String[] args) {
 
@@ -15,6 +16,7 @@ public class KNearestNeighbour {
 		File testFile = new File(testFilePath);
 
 		readTraining(trainingFile);
+		readTest(testFile);
 
 	}
 
@@ -39,24 +41,41 @@ public class KNearestNeighbour {
 			e.printStackTrace();
 		}
 
-		for(Double[] wine : wineTrainingArray) {
+		/*for(Double[] wine : wineTrainingArray) {
 			for(int i = 0; i<wine.length; i++) {
 				System.out.print(wine[i] + " ");
 			}
 			System.out.println("");
-		}
-
+		}*/
 	}
 
-
-
-	private void readTest(File testFile) {
+	private static void readTest(File testFile) {
 		try {
-			Scanner testScan = new Scanner(testFile);
+			Scanner trainScan = new Scanner(testFile);
 
+			trainScan.nextLine();
+
+			int numWine = (int)testFile.length() - 2;
+
+			while(trainScan.hasNextLine()) {
+				Scanner lineScan = new Scanner(trainScan.nextLine());
+				Double[] wineArray = new Double[numWineAttributes];
+				for(int j = 0; j<wineArray.length; j++) {
+					wineArray[j]=lineScan.nextDouble();
+				}
+				wineTestClasses.add(lineScan.nextInt());
+				wineTestArray.add(wineArray);
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		/*for(Double[] wine : wineTestArray) {
+			for(int i = 0; i<wine.length; i++) {
+				System.out.print(wine[i] + " ");
+			}
+			System.out.println("");
+		}*/
 	}
 
 }
