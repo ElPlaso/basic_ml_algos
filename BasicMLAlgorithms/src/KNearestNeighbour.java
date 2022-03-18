@@ -2,17 +2,16 @@ import java.io.*;
 import java.util.*;
 
 public class KNearestNeighbour {
-
+	private static String trainingFilePath = ".src/wine-training";
+	private static String testFilePath = ".src/wine-test";
 	private int numWineAttributes = 14; //13 attributes + class
 	private ArrayList<Double[]> wineTrainingArray = new ArrayList();
 	private ArrayList<Double[]> wineTestArray = new ArrayList();
 
 	public static void main(String[] args) {
-		String training = args[0];
-		String test = args[1];
 
-		File trainingFile = new File(training);
-		File testFile = new File(test);
+		File trainingFile = new File(trainingFilePath);
+		File testFile = new File(testFilePath);
 
 	}
 
