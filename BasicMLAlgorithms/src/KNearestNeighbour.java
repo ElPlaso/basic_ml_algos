@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 public class KNearestNeighbour {
 	private static String trainingFilePath = "./src/wine-training";
@@ -15,7 +16,7 @@ public class KNearestNeighbour {
 
 		readTraining(trainingFile);
 		readTest(testFile);
-
+		KNNMethod(3);
 	}
 
 	private static void readTraining(File trainFile) {
@@ -67,7 +68,7 @@ public class KNearestNeighbour {
 		}*/
 	}
 
-	private static void KNNMethod() {
+	private static void KNNMethod(int kValue) {
 		for(Wine wine : wineTestArray) {
 
 			HashMap<Double, Wine> wineDistances = new HashMap<>();
@@ -82,11 +83,22 @@ public class KNearestNeighbour {
 				wineDistances.put(distance, trainWine);
 			}
 
-			Double[] distances = (Double[]) wineDistances.keySet().toArray();
+			Object[] distances = wineDistances.keySet().toArray();
 			Arrays.sort(distances);
 
-			Wine closestWine = wineDistances.get(distances[0]);
+			ArrayList<Integer> closestClasses = new ArrayList<>();
+
+			for(int i = 0; i < kValue; i++) {
+				closestClasses.add(wineDistances.get(distances[i]).getWineType());
+			}
+
+			int mostFreq = mostCommon(closestClasses);
+
+
+			System.out.println(mostFreq);
 		}
+
+
 	}
 
 	private static double findRange(int col) {
@@ -109,6 +121,24 @@ public class KNearestNeighbour {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+
+	public static <T> T mostCommon(List<T> list) {
+	    Map<T, Integer> map = new HashMap<>();
+
+	    for (T t : list) {
+	        Integer val = map.get(t);
+	        map.put(t, val == null ? 1 : val + 1);
+	    }
+
+	    Entry<T, Integer> max = null;
+
+	    for (Entry<T, Integer> e : map.entrySet()) {
+	        if (max == null || e.getValue() > max.getValue())
+	            max = e;
+	    }
+
+	    return max.getKey();
 	}
 
 }
