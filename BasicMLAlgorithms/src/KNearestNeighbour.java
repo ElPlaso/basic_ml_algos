@@ -123,6 +123,7 @@ public class KNearestNeighbour {
 		}
 	}
 
+	//method sourced from online : https://stackoverflow.com/questions/19031213/java-get-most-common-element-in-a-list
 	public static <T> T mostCommon(List<T> list) {
 	    Map<T, Integer> map = new HashMap<>();
 
