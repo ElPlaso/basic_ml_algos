@@ -16,7 +16,7 @@ public class KNearestNeighbour {
 
 		readTraining(trainingFile);
 		readTest(testFile);
-		KNNMethod(3);
+		KNNMethod(5);
 	}
 
 	private static void readTraining(File trainFile) {
@@ -69,6 +69,7 @@ public class KNearestNeighbour {
 	}
 
 	private static void KNNMethod(int kValue) {
+		double correct = 0;
 		for(Wine wine : wineTestArray) {
 
 			HashMap<Double, Wine> wineDistances = new HashMap<>();
@@ -93,10 +94,14 @@ public class KNearestNeighbour {
 			}
 
 			int mostFreq = mostCommon(closestClasses);
-
-
-			System.out.println(mostFreq);
+			if(mostFreq == (int)wine.getWineType()) {
+				correct++;
+			}
+			System.out.print(mostFreq + " ");
+			System.out.println(wine.getWineType());
 		}
+		
+		System.out.println("percentage: " + correct/wineTestArray.size()*100);
 
 
 	}
