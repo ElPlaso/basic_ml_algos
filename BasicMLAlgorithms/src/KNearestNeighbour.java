@@ -16,7 +16,7 @@ public class KNearestNeighbour {
 
 		readTraining(trainingFile);
 		readTest(testFile);
-		KNNMethod(5);
+		KNNMethod(3);
 	}
 
 	private static void readTraining(File trainFile) {
