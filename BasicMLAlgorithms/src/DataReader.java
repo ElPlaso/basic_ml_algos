@@ -58,7 +58,7 @@ class DataReader {
         return instances;
     }
 
-    private static class Instance {
+    public static class Instance {
 
         private final String category;
         private final List<Boolean> vals;
