@@ -30,4 +30,27 @@ public class Node {
 	public boolean getIsLeaf() {
 		return isLeaf;
 	}
+	
+	public void report(String indent){
+		if(!isLeaf) {
+			System.out.printf("%s%s = True:%n", indent, attName);
+			if(leftNode!=null) {
+				leftNode.report(indent+"\t");
+			}
+			System.out.printf("%s%s = False:%n", indent, attName);
+			if(rightNode!=null) {
+				rightNode.report(indent+"\t");
+			}
+		}
+		else {
+			if (probability==0){ //Error-checking
+				System.out.printf("%sUnknown%n", indent);
+			}
+			else{
+				//System.out.printf("%sClass %s, prob=%.2f%n", indent, className, probability);
+			}
+		}
+	}
+
+	
 }

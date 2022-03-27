@@ -1,5 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,13 +12,22 @@ public class DecisionTree {
     static List<DataReader.Instance> allInstances;
 	
 	public static void main(String[] args) {
-		dataReader.readDataFile("hepatitis-training");
+		dataReader.readDataFile("./src/hepatitis-training");
 		categoryNames = dataReader.categoryNames;
 		attNames =  dataReader.attNames;
 		allInstances = dataReader.allInstances;
+		
+		Set instances = new HashSet<>();
+		
+		for(DataReader.Instance in : allInstances) {
+			instances.add(in);
+		}
+		
+		Node root = buildTree(instances, attNames);
+		root.report("");
 	}
 	
-	private Node buildTree(Set<DataReader.Instance> instances, List<String> attributes) {
+	private static Node buildTree(Set<DataReader.Instance> instances, List<String> attributes) {
 		//if instances empty
 		if(allInstances.isEmpty()) {
 			//return a leaf node that contains the name and probability of the most probable
@@ -24,7 +35,7 @@ public class DecisionTree {
 			
 			
 		}
-		else if(instancesPure()) {
+		else if(instancesPure(instances)) {
 			//return a leaf node that contains the name of the class and probability 1
 			String catName = null;
 			for(DataReader.Instance inst : instances) {
@@ -42,11 +53,22 @@ public class DecisionTree {
 		return null;
 	}
 	
-	private boolean instancesPure() {
-		return false;
+	private static boolean instancesPure(Set<DataReader.Instance> instances) {
+		String cat = "";
+		for(DataReader.Instance ins : instances) {
+			cat = ins.getCategory();
+			break;
+		}
+		for(DataReader.Instance ins : instances) {
+			if(!ins.getCategory().equals(cat)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
-	private Node findBestAttribute(Set<DataReader.Instance> instances, List<String> attributes ) {
+	private static Node findBestAttribute(Set<DataReader.Instance> instances, List<String> attributes ) {
 		Set<DataReader.Instance> bestInstTrue = null;
 		Set<DataReader.Instance> bestInstFalse = null;
 		String bestAtt = null;
@@ -54,8 +76,8 @@ public class DecisionTree {
 		
 		for(String attribute : attNames) {
 			//separate instances into 2 sets, attributes true/false
-			Set<DataReader.Instance> instTrue = null;
-			Set<DataReader.Instance> instFalse = null;
+			Set<DataReader.Instance> instTrue = new HashSet<>();
+			Set<DataReader.Instance> instFalse = new HashSet<>();
 			
 			for(DataReader.Instance instance : instances) {
 				if(instance.getAtt(attNames.indexOf(attribute))) {
@@ -89,7 +111,7 @@ public class DecisionTree {
 		return new Node(bestAtt, left, right);
 	}
 	
-	private double computeImpurity(Set<DataReader.Instance> inst){
+	private static double computeImpurity(Set<DataReader.Instance> inst){
 		int total = inst.size();
 		int live = 0;
 		
@@ -101,7 +123,11 @@ public class DecisionTree {
 		
 		int die = total - live;
 		
-		double impurity = live/total * die/total; 
+		double impurity = 0;
+		
+		if(total!=0) {
+			impurity = live/total * die/total; 
+		}
 		
 		return impurity;
 	}
