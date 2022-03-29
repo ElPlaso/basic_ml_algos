@@ -47,7 +47,7 @@ public class Node {
 				System.out.printf("%sUnknown%n", indent);
 			}
 			else{
-				//System.out.printf("%sClass %s, prob=%.2f%n", indent, className, probability);
+				System.out.printf("%sClass %s, prob=%.2f%n", indent, catName, probability);
 			}
 		}
 	}
