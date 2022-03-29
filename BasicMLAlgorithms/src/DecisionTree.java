@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class DecisionTree {
@@ -12,7 +13,7 @@ public class DecisionTree {
     static List<DataReader.Instance> allInstances;
 	
 	public static void main(String[] args) {
-		dataReader.readDataFile("./src/golf-training.dat");
+		dataReader.readDataFile("./src/hepatitis-training");
 		categoryNames = dataReader.categoryNames;
 		attNames =  dataReader.attNames;
 		allInstances = dataReader.allInstances;
@@ -34,7 +35,6 @@ public class DecisionTree {
 		if(instances.isEmpty()) {
 			//return a leaf node that contains the name and probability of the most probable
 			//class across the whole training set (i.e. the ‘‘baseline’’ predictor)
-			
 			System.out.println("instances empty");
 		}
 		else if(instancesPure(instances)) {
@@ -52,8 +52,7 @@ public class DecisionTree {
 			
 		}
 		else {
-			
-			return findBestAttribute(new HashSet<>(instances), attributes);
+			return findBestAttribute(new HashSet<DataReader.Instance>(instances), new ArrayList<>(attributes));
 		}
 		return null;
 	}
@@ -65,11 +64,11 @@ public class DecisionTree {
 			break;
 		}
 		for(DataReader.Instance ins : instances) {
-			if(!ins.getCategory().equals(cat)) {
+			if(!Objects.equals(ins.getCategory(), cat)) {
 				return false;
 			}
+			
 		}
-		
 		return true;
 	}
 	
@@ -86,15 +85,25 @@ public class DecisionTree {
 			Set<DataReader.Instance> instTrue = new HashSet<>();
 			Set<DataReader.Instance> instFalse = new HashSet<>();
 			
+			boolean gotin1 = false;
+			
 			for(DataReader.Instance instance : instances) {
-				System.out.println(attNames.indexOf(attribute));
 				if(instance.getAtt(attNames.indexOf(attribute))) {
 					instTrue.add(instance);
 				}
 				else {
 					instFalse.add(instance);
 				}
+				gotin = true;
+				
 			}
+			
+			if(gotin==false) {
+				System.out.println("didnt get in 1");
+			}
+			//System.out.println("inst is pure: " + instancesPure(instances));
+			//System.out.println("empty true: " + instTrue.isEmpty());
+			//System.out.println("empty false: " + instFalse.isEmpty());
 			
 			double impurityTrue = computeImpurity(instTrue);
 			double impurityFalse = computeImpurity(instFalse);
@@ -117,8 +126,6 @@ public class DecisionTree {
 		 
 		attributes.remove(bestAtt);
 		
-		//System.out.println(bestAtt);
-		
 		List<String> newAttributes = new ArrayList<>(attributes);
 		
 		Node left = buildTree(bestInstTrue, newAttributes);
@@ -129,7 +136,7 @@ public class DecisionTree {
 	
 	private static double computeImpurity(Set<DataReader.Instance> inst){
 		int total = inst.size();
-		int live = 0;
+		double live = 0.0;
 		
 		for(DataReader.Instance in : inst) {
 			if(in.getCategory().equals("live")) {
@@ -137,12 +144,12 @@ public class DecisionTree {
 			}
 		}
 		
-		int die = total - live;
+		double die = total - live;
 		
 		double impurity = 0;
 		
 		if(total!=0) {
-			impurity = live/total * die/total; 
+			impurity = (live * die) / Math.pow(total, 2);
 		}
 		
 		return impurity;
