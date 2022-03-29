@@ -12,7 +12,7 @@ public class DecisionTree {
     static List<DataReader.Instance> allInstances;
 	
 	public static void main(String[] args) {
-		dataReader.readDataFile("./src/hepatitis-training");
+		dataReader.readDataFile("./src/golf-training.dat");
 		categoryNames = dataReader.categoryNames;
 		attNames =  dataReader.attNames;
 		allInstances = dataReader.allInstances;
@@ -87,6 +87,7 @@ public class DecisionTree {
 			Set<DataReader.Instance> instFalse = new HashSet<>();
 			
 			for(DataReader.Instance instance : instances) {
+				System.out.println(attNames.indexOf(attribute));
 				if(instance.getAtt(attNames.indexOf(attribute))) {
 					instTrue.add(instance);
 				}
