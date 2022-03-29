@@ -17,11 +17,13 @@ public class DecisionTree {
 		attNames =  dataReader.attNames;
 		allInstances = dataReader.allInstances;
 		
-		Set instances = new HashSet<>();
+		//Set instances = new HashSet<>();
 		
-		for(DataReader.Instance in : allInstances) {
-			instances.add(in);
-		}
+		//for(DataReader.Instance in : allInstances) {
+			//instances.add(in);
+		//}
+		
+		Set<DataReader.Instance> instances = new HashSet<>(allInstances);
 		
 		Node root = buildTree(instances, attNames);
 		root.report("");
@@ -29,11 +31,11 @@ public class DecisionTree {
 	
 	private static Node buildTree(Set<DataReader.Instance> instances, List<String> attributes) {
 		//if instances empty
-		if(allInstances.isEmpty()) {
+		if(instances.isEmpty()) {
 			//return a leaf node that contains the name and probability of the most probable
 			//class across the whole training set (i.e. the ‘‘baseline’’ predictor)
 			
-			
+			System.out.println("instances empty");
 		}
 		else if(instancesPure(instances)) {
 			//return a leaf node that contains the name of the class and probability 1
@@ -43,12 +45,15 @@ public class DecisionTree {
 				return new Node(catName, 1);
 			}
 		}
-		else if(attNames.isEmpty()) {
+		else if(attributes.isEmpty()) {
 			//return a leaf node that contains the name and probability of the majority 
 			//class of instances (chosen randomly if classes are equal)
+			System.out.println("attributes empty");
+			
 		}
 		else {
-			return findBestAttribute(instances, attributes);
+			
+			return findBestAttribute(new HashSet<>(instances), attributes);
 		}
 		return null;
 	}
@@ -69,12 +74,14 @@ public class DecisionTree {
 	}
 	
 	private static Node findBestAttribute(Set<DataReader.Instance> instances, List<String> attributes ) {
-		Set<DataReader.Instance> bestInstTrue = null;
-		Set<DataReader.Instance> bestInstFalse = null;
+		Set<DataReader.Instance> bestInstTrue = new HashSet<>();
+		Set<DataReader.Instance> bestInstFalse = new HashSet<>();
 		String bestAtt = null;
 		double bestScore = 1;
 		
-		for(String attribute : attNames) {
+		boolean gotin = false;
+		
+		for(String attribute : attributes) {
 			//separate instances into 2 sets, attributes true/false
 			Set<DataReader.Instance> instTrue = new HashSet<>();
 			Set<DataReader.Instance> instFalse = new HashSet<>();
@@ -100,13 +107,21 @@ public class DecisionTree {
 				bestInstTrue = instTrue;
 				bestInstFalse = instFalse;
 				bestScore = weightedImp;
+				gotin = true;
 			}
+		}
+		if(!gotin) {
+			System.out.println("didnt get in");
 		}
 		 
 		attributes.remove(bestAtt);
 		
-		Node left = buildTree(bestInstTrue, attributes);
-		Node right = buildTree(bestInstFalse, attributes);
+		//System.out.println(bestAtt);
+		
+		List<String> newAttributes = new ArrayList<>(attributes);
+		
+		Node left = buildTree(bestInstTrue, newAttributes);
+		Node right = buildTree(bestInstFalse, newAttributes);
 		
 		return new Node(bestAtt, left, right);
 	}
