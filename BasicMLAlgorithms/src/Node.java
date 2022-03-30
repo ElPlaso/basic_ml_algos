@@ -31,6 +31,14 @@ public class Node {
 		return isLeaf;
 	}
 	
+	public String getCat() {
+		return catName;
+	}
+	
+	public String getAtt() {
+		return attName;
+	}
+	
 	public void report(String indent){
 		if(!isLeaf) {
 			System.out.printf("%s%s = True:%n", indent, attName);
